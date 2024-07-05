@@ -43,16 +43,15 @@ const RealTimeOptions: React.FC = () => {
         }
 
         // Fetch data from AlphaVantage API
-        const response = await fetch(`https://www.alphavantage.co/query?function=REALTIME_OPTIONS&symbol=IBM&apikey=${apiKey}`);
+        const response = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&apikey=${apiKey}`);
         if (!response.ok) {
           throw new Error('Something went wrong');
         }
 
         // Check for fallback data scenario when API limit complet
-        const apiResponse: AlphaVantageResponse | { Information: string } = await response.json();
+        const apiResponse: AlphaVantageResponse | { message: string } = await response.json();
         let jsonData: AlphaVantageResponse;
-
-        if ('Information' in apiResponse) {
+        if ('message' in apiResponse) {
           // Use JSON data from a local file when API limit is exceeded
           jsonData = AlphaVantageJSON as AlphaVantageResponse;
         } else {
